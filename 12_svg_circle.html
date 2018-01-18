@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body{text-align:center}
+        svg{background:#ddd}
+    </style>
+</head>
+<body>
+    <svg id="s3" width="800" height="600">
+        <!--<circle r="50" cx="50" cy="50" fill="blue" fill-opacity="0.7"></circle>-->
+    </svg>
+    <script src="js/jquery.js"></script>
+    <script type="text/javascript">
+
+        //创建随机数指定范围
+        function rn(min,max){
+            var num = Math.random() * (max-min)+min;
+            return Math.floor(num);
+        }
+        function rc(min,max){
+            var r = rn(min,max),
+                g = rn(min,max),
+                b = rn(min,max);
+            return `rgb(${r},${g},${b})`
+        }
+        var s3 = document.getElementById("s3");
+        for(var i=0; i<30; i ++){
+            var c = document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "circle"
+            );
+            c.setAttribute("r",rn(10,80));
+            c.setAttribute("cx",rn(0,800));
+            c.setAttribute("cy",rn(0,600));
+            c.setAttribute("fill",rc(0,180));
+            c.setAttribute("fill-opacity",Math.random());
+            s3.appendChild(c);
+            c.onclick = function(){
+                var that = this;//预留this
+                that.onclick = null;
+                var t = setInterval(function(){
+                    var r = parseInt(that.getAttribute("r"));
+                    var p = parseFloat(that.getAttribute("fill-opacity"));
+                    console.log(r+":"+p);
+                    r *= 1.5;
+                    p *= 0.9;
+                    that.setAttribute("r",r);
+                    that.setAttribute("fill-opacity",p);
+                    if(p<0.01){
+                        clearInterval(t);
+                        s3.removeChild(that);
+                    }
+                },1000/16)
+            }
+        }
+
+    </script>
+</body>
+</html>
